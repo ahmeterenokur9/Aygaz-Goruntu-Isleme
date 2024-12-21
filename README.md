@@ -51,25 +51,44 @@ Projede aşağıdaki Python kütüphaneleri ve araçlar kullanılmıştır:
    - Bu işlem sonucunda model performansındaki değişiklikler değerlendirilmiştir.  
 
 ---
+# CNN Modeli Performans Analizi ve Çözüm Önerileri
 
-### Sonuçlar ve Performans
+## Mevcut Durumun Analizi
 
-- **Eğitim Doğruluğu**: Eğitim setindeki doğruluk %... olarak hesaplanmıştır.  
-- **Test Doğruluğu**: Test setindeki doğruluk %... olarak hesaplanmıştır.  
-- **Manipüle Edilmiş Test Doğruluğu**: Manipüle edilmiş veri seti üzerinde doğruluk %... olarak gözlemlenmiştir.  
-- **Renk Sabitliği Performansı**: Gray World algoritması sonrası model doğruluğu %... olarak kaydedilmiştir.  
+Test sonuçlarımız, modelin farklı veri setleri üzerindeki performansında dikkat çekici bir düşüş eğilimi göstermektedir. Orijinal test setinde %60.71 olan başarı oranı, ışık manipülasyonları sonrasında %57.16'ya, renk sabitliği uygulaması sonrasında ise %50.66'ya gerilemiştir. Bu düşüş trendi, önemli teknik ve metodolojik çıkarımlar yapmamızı gerektirmektedir.
 
----
+## Performans Düşüşünün Olası Nedenleri
 
-### Çalıştırma Talimatları
+1. **Renk Sabitliği Algoritmasının Etkisi**
+   - Renk sabitliği algoritmasının görüntülerdeki önemli özellikleri beklenmedik şekilde değiştirmiş olması muhtemeldir
+   - Algoritmanın aşırı normalizasyon yaparak ayırt edici özellikleri kaybetmiş olabileceği düşünülmektedir
+   - Model eğitiminde kullanılan veriler ile işlenmiş test verileri arasında tutarsızlık oluşmuş olabilir
 
-1. Kaggle veri setini indirip proje klasöründe uygun yere yerleştirin.  
-2. Kodları parça parça çalıştırarak aşağıdaki adımları takip edin:  
-   - **Veri Hazırlama**: Görselleri eğitim ve test setlerine ayırın.  
-   - **Model Eğitimi**: CNN modelini eğiterek kaydedin.  
-   - **Görüntü Manipülasyonu**: Farklı ışık koşulları için manipüle edilmiş veri setini oluşturun.  
-   - **Renk Sabitliği**: Gray World algoritmasını uygulayın ve performansı karşılaştırın.  
+2. **Model Mimarisinin Dayanıklılığı**
+   - Mevcut CNN modelinin ışık değişimlerine karşı yeterince dayanıklı olmadığı görülmektedir
+   - Feature extraction katmanlarının çeşitli ışık koşullarında tutarlı özellikler çıkaramadığı anlaşılmaktadır
 
----
+## Önerilen Çözüm Yolları
+
+### 1. Veri Augmentasyonu Geliştirmeleri
+- Eğitim setine çeşitli ışık koşullarında manipüle edilmiş görüntüler eklenmelidir
+- Parlaklık, kontrast ve renk dönüşümleri içeren veri çoğaltma teknikleri uygulanmalıdır
+- Random brightness ve random contrast augmentasyonları modele dahil edilmelidir
+
+### 2. Model Mimarisi İyileştirmeleri
+- Batch normalization katmanları eklenerek model dayanıklılığı artırılmalıdır
+- Dropout oranları gözden geçirilmeli ve gerekirse artırılmalıdır
+- Daha derin ve geniş bir mimari kullanılarak model kapasitesi artırılabilir
+
+### 3. Renk Sabitliği Yaklaşımının Revizyonu
+- Mevcut renk sabitliği algoritması yerine daha az agresif normalizasyon teknikleri denenmelidir
+- Histogram eşitleme gibi alternatif görüntü ön işleme teknikleri değerlendirilmelidir
+- Renk sabitliği işlemi eğitim setine de uygulanarak tutarlılık sağlanmalıdır
+
+### 4. Ensemble Öğrenme Yaklaşımı
+- Farklı ışık koşullarında eğitilmiş multiple modeller oluşturulabilir
+- Bu modellerin tahminleri birleştirilerek daha gürbüz bir sistem elde edilebilir
+
+
 
 PROJE KAGGLE LİNKİ : https://www.kaggle.com/code/ahmeteren9/aygaz-g-r-nt-leme-bootcamp-projesi
